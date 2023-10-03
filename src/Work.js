@@ -16,6 +16,8 @@ import Stack from "@mui/material/Stack";
 import CardActions from '@mui/material/CardActions';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import ShareIcon from '@mui/icons-material/Share';
+import {workattributes} from "./queries";
+
 
 const ExpandMore = styled((props) => {
     const { expand, ...other } = props;
@@ -39,7 +41,7 @@ export default function Work(props){
     };
 
     return(
-        <Card key={props.entry.s.value} style={{'flex-shrink': 0}}>
+        <Card key={props.entry.s.value} style={{'flexShrink': 0}}>
             <CardContent >
                 <Typography variant={"span"}>{props.entry.l.value}</Typography>
                 <ExpandMore
@@ -60,7 +62,7 @@ export default function Work(props){
 
 function WorkProperties(props) {
 
-    const uri = "http://localhost:7200/repositories/grouping-displays?query=";
+    const uri = "http://localhost:7200/repositories/LRMSearch-data?query=";
     const sparql = `
         PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
         select * where { 
@@ -71,12 +73,12 @@ function WorkProperties(props) {
         limit 100 
     `;
 
-    //console.log(sparql);
+    console.log(sparql);
 
     const { isLoading, error, data } = useQuery({
         queryKey: [props.wid],
         queryFn: () =>
-            fetch(uri + encodeURIComponent(sparql), {headers: {
+            fetch(workattributes(props.wid), {headers: {
                     "Accept": "application/sparql-results+json",
                     // 'Content-Type': 'application/x-www-form-urlencoded',
                 }}).then(

@@ -18,6 +18,7 @@ import CardHeader from '@mui/material/CardHeader';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import IconButton, { IconButtonProps } from '@mui/material/IconButton';
 import Work from "./Work";
+import {worklist} from "./queries";
 
 import {
     QueryClient,
@@ -28,21 +29,8 @@ import * as PropTypes from "prop-types";
 
 const queryClient = new QueryClient();
 
-const uri = "http://localhost:7200/repositories/grouping-displays?query=";
 
-const workSparql = `
-    PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-    PREFIX rdac: <http://rdaregistry.info/Elements/c/>
-    PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-    select ?s (SAMPLE(?label) as ?l)
-    where {
-        ?s rdf:type rdac:C10001 .
-        OPTIONAL{?s rdfs:label ?label}.
-    }
-    group by ?s
-    order by ?s
-    limit 5
-`;
+//console.log(uri + encodeURIComponent(workSparql));
 
 const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -89,7 +77,7 @@ function Example() {
     const { isLoading, error, data } = useQuery({
         queryKey: ['workList'],
         queryFn: () =>
-            fetch(uri + encodeURIComponent(workSparql), {headers: {
+            fetch(worklist(), {headers: {
         "Accept": "application/sparql-results+json",
         // 'Content-Type': 'application/x-www-form-urlencoded',
     }}).then(
